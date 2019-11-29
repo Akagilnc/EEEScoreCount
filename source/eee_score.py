@@ -16,6 +16,7 @@ class EEEScore:
 
     def main(self):
         files = self.get_files()
+        print(files)
         for file in files:
             if '~$' == file[:2]:
                 continue
@@ -23,7 +24,7 @@ class EEEScore:
                 self.teacher_data = self.get_teachers_df(self.read_excel(file))
             if '训练营' in file and '11月评分' in file:
                 self.daily_data = self.get_daily_score(self.read_excel(file, '日常分数+线上分数排名', 1))
-        if not self.teacher_data or self.teacher_data.empty:
+        if self.teacher_data.empty:
             raise ValueError('No files found')
         result = self.get_teachers_total_score(self.teacher_data)
         result = self.get_final_teacher_score(result)
@@ -80,5 +81,10 @@ class EEEScore:
     def make_ranking_file(df):
         df = df.reset_index()
         df.index = df.index + 1
+        print('writing to excel')
         df.to_excel('ranking.xlsx')
 
+
+
+test = EEEScore()
+test.main()
